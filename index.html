@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Boat Stability Simulation</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<h1>Boat Stability Simulation</h1>
+
+<div id="controls">
+  <label for="loadX">Load position (x): </label>
+  <input type="range" id="loadX" min="-80" max="80" value="0" />
+  <span id="loadXVal">0</span> cm
+  <button id="resetBtn">Reset</button>
+</div>
+
+<canvas id="canvas" width="600" height="400"></canvas>
+
+<div id="info">
+  <p>Boat angle: <span id="angleDisplay">0</span>°</p>
+  <p>Capsized: <span id="capsizedDisplay">No</span></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
