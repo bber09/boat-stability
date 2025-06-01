@@ -183,20 +183,22 @@ loadXSlider.addEventListener('input', (e) => {
   resetSimulation();
 });
 
+// Attach reset button handler
 resetBtn.addEventListener('click', () => {
-  // Reset slider value to center
-  loadX = 0;
-  loadXSlider.value = 0;
-  loadXValSpan.textContent = '0';
-
   resetSimulation();
 });
 
 function resetSimulation() {
+  // Reset physics state
   angle = 0;
   angularVelocity = 0;
   angularAcceleration = 0;
   capsized = false;
+
+  // Reset load position and slider UI to initial
+  loadX = 0;
+  loadXSlider.value = 0;
+  loadXValSpan.textContent = "0";
 }
 
 resetSimulation();
