@@ -179,8 +179,6 @@ let lastTime = null;
 loadXSlider.addEventListener('input', (e) => {
   loadX = parseFloat(e.target.value);
   loadXValSpan.textContent = loadX;
-  // Reset simulation to upright on load move
-  resetSimulation();
 });
 
 // Attach reset button handler
