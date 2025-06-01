@@ -184,6 +184,11 @@ loadXSlider.addEventListener('input', (e) => {
 });
 
 resetBtn.addEventListener('click', () => {
+  // Reset slider value to center
+  loadX = 0;
+  loadXSlider.value = 0;
+  loadXValSpan.textContent = '0';
+
   resetSimulation();
 });
 
