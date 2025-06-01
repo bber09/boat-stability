@@ -17,6 +17,10 @@ const loadMass = 5;      // mass of movable load
 const g = 980; // gravity cm/s² (9.8 m/s² = 980 cm/s²)
 const waterDensity = 1; // relative units (not used directly here)
 
+// Waves
+const waveMaxAngle = 10 * Math.PI / 180; // 10 degrees in radians
+const waveFrequency = 0.5; // oscillations per second (adjust speed)
+
 // Simulation state
 let angle = 0;       // radians, positive = tilt right
 let angularVelocity = 0;
@@ -165,6 +169,13 @@ function loop(timestamp) {
 
   const {CG, CB} = updatePhysics(dt);
 
+  // Calculate wave offset using total elapsed time in seconds
+  const elapsed = timestamp / 1000;
+  const waveOffset = waveMaxAngle * Math.sin(2 * Math.PI * waveFrequency * elapsed);
+
+  // Add waveOffset to physics angle for display only
+  const displayAngle = angle + waveOffset;
+  
   drawBoat(angle, CG, CB, loadX);
 
   // Update UI info
