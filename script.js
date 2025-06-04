@@ -144,59 +144,89 @@ function drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY) {
   ctx.beginPath();
   ctx.arc(boatCG.x, boatCG.y, 5, 0, Math.PI * 2);
   ctx.fill();
-
- // Weight arrow down from boatCG
-  ctx.strokeStyle = '#FF0000';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(boatCG.x, boatCG.y);
-  ctx.lineTo(boatCG.x, boatCG.y + 50);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(boatCG.x - 5, boatCG.y + 40);
-  ctx.lineTo(boatCG.x, boatCG.y + 50);
-  ctx.lineTo(boatCG.x + 5, boatCG.y + 40);
-  ctx.stroke();
   
-// --- Draw LOAD’s CG (orange) ---
+  // --- Draw LOAD’s CG (orange) ---
   ctx.fillStyle = '#FFA500';
   ctx.beginPath();
   ctx.arc(loadCG.x, loadCG.y, 5, 0, Math.PI * 2);
   ctx.fill();
-  // Weight arrow down from loadCG
-  ctx.strokeStyle = '#FFA500';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(loadCG.x, loadCG.y);
-  ctx.lineTo(loadCG.x, loadCG.y + 50);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(loadCG.x - 5, loadCG.y + 40);
-  ctx.lineTo(loadCG.x, loadCG.y + 50);
-  ctx.lineTo(loadCG.x + 5, loadCG.y + 40);
-  ctx.stroke();
 
   // --- Draw COMBINED CG (black) ---
   ctx.fillStyle = '#000000';
   ctx.beginPath();
   ctx.arc(combinedCG.x, combinedCG.y, 5, 0, Math.PI * 2);
   ctx.fill();
-  // Weight arrow down from combinedCG
-  ctx.strokeStyle = '#000000';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(combinedCG.x, combinedCG.y);
-  ctx.lineTo(combinedCG.x, combinedCG.y + 50);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(combinedCG.x - 5, combinedCG.y + 40);
-  ctx.lineTo(combinedCG.x, combinedCG.y + 50);
-  ctx.lineTo(combinedCG.x + 5, combinedCG.y + 40);
-  ctx.stroke();
-  
+
   ctx.restore();
 }
 
+function rotatePoint(pt, θ) {
+    return {
+      x: pt.x * Math.cos(θ) - pt.y * Math.sin(θ),
+      y: pt.x * Math.sin(θ) + pt.y * Math.cos(θ)
+    };
+  }
+
+  // Boat-CG world position:
+  const boatCG_world = rotatePoint(boatCG, displayAngle);
+  boatCG_world.x += originX;
+  boatCG_world.y += originY + submergedDepth;
+
+  // Load-CG world position:
+  const loadCG_world = rotatePoint(loadCG, displayAngle);
+  loadCG_world.x += originX;
+  loadCG_world.y += originY + submergedDepth;
+
+  // Combined-CG world position:
+  const combinedCG_world = rotatePoint(combinedCG, displayAngle);
+  combinedCG_world.x += originX;
+  combinedCG_world.y += originY + submergedDepth;
+
+  // DRAW a vertical arrow (straight down) from each world-space CG:
+  const arrowLength = 50; // in pixels; adjust if you want longer/shorter arrows
+
+  // Boat CG arrow (red)
+  ctx.strokeStyle = '#FF0000';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(boatCG_world.x, boatCG_world.y);
+  ctx.lineTo(boatCG_world.x, boatCG_world.y + arrowLength);
+  ctx.stroke();
+  // arrowhead
+  ctx.beginPath();
+  ctx.moveTo(boatCG_world.x - 5, boatCG_world.y + arrowLength - 10);
+  ctx.lineTo(boatCG_world.x, boatCG_world.y + arrowLength);
+  ctx.lineTo(boatCG_world.x + 5, boatCG_world.y + arrowLength - 10);
+  ctx.stroke();
+
+  // Load CG arrow (orange)
+  ctx.strokeStyle = '#FFA500';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(loadCG_world.x, loadCG_world.y);
+  ctx.lineTo(loadCG_world.x, loadCG_world.y + arrowLength);
+  ctx.stroke();
+  // arrowhead
+  ctx.beginPath();
+  ctx.moveTo(loadCG_world.x - 5, loadCG_world.y + arrowLength - 10);
+  ctx.lineTo(loadCG_world.x, loadCG_world.y + arrowLength);
+  ctx.lineTo(loadCG_world.x + 5, loadCG_world.y + arrowLength - 10);
+  ctx.stroke();
+
+  // Combined CG arrow (black)
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(combinedCG_world.x, combinedCG_world.y);
+  ctx.lineTo(combinedCG_world.x, combinedCG_world.y + arrowLength);
+  ctx.stroke();
+  // arrowhead
+  ctx.beginPath();
+  ctx.moveTo(combinedCG_world.x - 5, combinedCG_world.y + arrowLength - 10);
+  ctx.lineTo(combinedCG_world.x, combinedCG_world.y + arrowLength);
+  ctx.lineTo(combinedCG_world.x + 5, combinedCG_world.y + arrowLength - 10);
+  ctx.stroke();
+}
 
 function updatePhysics(dt) {
   if (capsized) return;
