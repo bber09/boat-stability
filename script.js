@@ -11,9 +11,19 @@ let waveOn = true;
 
 // Boat parameters (all in cm and kg)
 const boatWidth = 160;   // hull width
-const boatHeight = 40;   // hull height (draft)
-const boatMass = 10;     // mass of boat hull
-const loadMass = 5;      // mass of movable load
+const boatHeight = 40;   // hull height
+const boatMassInputElem = document.getElementById('boatMassInput');     // mass of boat hull
+const loadMassInputElem = document.getElementById('loadMassInput');     // mass of movable load
+let boatMass = parseFloat( boatMassInputElem.value );
+let loadMass = parseFloat( loadMassInputElem.value );
+
+// Whenever either input changes, update the variables:
+boatMassInputElem.addEventListener('input', () => {
+  boatMass = parseFloat(boatMassInputElem.value) || 0;
+});
+loadMassInputElem.addEventListener('input', () => {
+  loadMass = parseFloat(loadMassInputElem.value) || 0;
+});
 
 // Physics constants
 const g = 980; // gravity cm/s² (9.8 m/s² = 980 cm/s²)
@@ -34,8 +44,12 @@ let capsized = false;
 // Load position (x relative to boat center, cm)
 let loadY = 0;
 
-// Moment of inertia approx (rectangle about center)
-const I = (1/12) * (boatMass + loadMass) * (boatWidth ** 2 + (boatHeight*3)**2);
+// I = moment of inertia for (boatMass+loadMass):
+function momentOfInertia() {
+  const totalM = boatMass + loadMass;
+  // approximate rectangular hull + load (all at same x-axis):
+  return (1/12) * totalM * ( boatWidth**2 + (boatHeight * 3)**2 );
+}
 
 // Compute the static “draft” (submerged depth) so that displaced mass of water = boatMass + loadMass.
 // Since we treat waterDensity as kg/cm², the submerged area = boatWidth * submergedDepth.
@@ -188,7 +202,10 @@ function updatePhysics(dt) {
   // Calculate torque: torque = leverArm * weight * g
   const totalMass = boatMass + loadMass;
   const torque = leverArm * totalMass * g;
-
+  
+  // I (moment of inertia) at this instant:
+  const I = momentOfInertia();
+  
   // Angular acceleration = torque / I
   angularAcceleration = torque / I;
 
