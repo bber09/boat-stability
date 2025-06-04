@@ -37,10 +37,10 @@ const I = (1/12) * (boatMass + loadMass) * (boatWidth ** 2 + (boatHeight*3)**2);
 
 function updateCG() {
   // Boat CG at center (0, boatHeight/2)
-  const boatCG = {x: 0, y: boatHeight / 2};
+  const boatCG = {x: 0, y: -boatHeight / 2};
 
   // Load CG at (0, boatHeight/2 - loadY)
-  const loadCG = {x: 0, y: (boatHeight / 2) - loadY};
+  const loadCG = {x: 0, y: (-boatHeight / 2) + loadY};
   
   // Composite CG weighted average
   const totalMass = boatMass + loadMass;
@@ -66,7 +66,7 @@ function calcCB(angle) {
   // Simple approximation:
   const shiftX = (boatHeight / 2) * Math.sin(angle);
 
-  return {x: shiftX, y: boatHeight / 2};
+  return {x: shiftX, y: -boatHeight / 2};
 }
 
 function drawBoat(displayAngle, CG, CB, loadY) {
