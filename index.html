@@ -33,6 +33,43 @@
     />
 </div>
 
+<style>
+  /* Make all controls sit in a single row, centered vertically,
+     with a gap between each “chunk.” */
+  #controls {
+    display: flex;
+    flex-wrap: wrap;        /* allows wrapping if the screen is narrow */
+    align-items: center;    /* vertically center‐align everything */
+    gap: 1rem;              /* 1rem (≈16px) of space between each item */
+    margin-bottom: 1rem;    /* some breathing room below */
+  }
+
+  /* Optional: give each label/input pair a bit of breathing room */
+  #controls label {
+    margin-right: 0.25rem;  /* small gap after each label */
+    white-space: nowrap;    /* keep “Boat Mass (kg):” on one line */
+  }
+
+  /* Make range‐slider and text a bit tighter together */
+  #loadY {
+    margin-left: 0.5rem;
+    margin-right: 0.25rem;
+  }
+
+  #loadYVal {
+    min-width: 2rem;        /* avoid it collapsing when “0 cm” changes */
+    text-align: center;
+  }
+
+  /* Make buttons and inputs visually consistent height */
+  #controls button,
+  #controls input[type="number"],
+  #controls input[type="range"] {
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+  }
+</style>
+  
 <canvas id="canvas" width="600" height="400"></canvas>
 
 <div id="info">
