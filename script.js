@@ -1,8 +1,8 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-const loadXSlider = document.getElementById('loadX');
-const loadXValSpan = document.getElementById('loadXVal');
+const loadYSlider = document.getElementById('loadY');
+const loadYValSpan = document.getElementById('loadYVal');
 const resetBtn = document.getElementById('resetBtn');
 const angleDisplay = document.getElementById('angleDisplay');
 const capsizedDisplay = document.getElementById('capsizedDisplay');
@@ -29,7 +29,7 @@ let angularAcceleration = 0;
 let capsized = false;
 
 // Load position (x relative to boat center, cm)
-let loadX = 0;
+let loadY = 0;
 
 // Moment of inertia approx (rectangle about center)
 const I = (1/12) * (boatMass + loadMass) * (boatWidth ** 2 + (boatHeight*3)**2);
@@ -38,8 +38,8 @@ function updateCG() {
   // Boat CG at center (0, boatHeight/2)
   const boatCG = {x: 0, y: boatHeight / 2};
 
-  // Load CG at (loadX, boatHeight/2)
-  const loadCG = {x: loadX, y: boatHeight / 2};
+  // Load CG at (loadY, boatHeight/2)
+  const loadCG = {x: loadY, y: boatHeight / 2};
 
   // Composite CG weighted average
   const totalMass = boatMass + loadMass;
@@ -68,7 +68,7 @@ function calcCB(angle) {
   return {x: shiftX, y: boatHeight / 2};
 }
 
-function drawBoat(angle, CG, CB, loadX) {
+function drawBoat(angle, CG, CB, loadY) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.save();
@@ -93,7 +93,7 @@ function drawBoat(angle, CG, CB, loadX) {
   // Draw load as red circle
   ctx.fillStyle = 'red';
   ctx.beginPath();
-  ctx.arc(loadX, -boatHeight/2, 8, 0, Math.PI * 2);
+  ctx.arc(loadY, -boatHeight/2, 8, 0, Math.PI * 2);
   ctx.fill();
 
   // Draw CG as blue circle
@@ -176,7 +176,7 @@ function loop(timestamp) {
   // Add waveOffset to physics angle for display only
   const displayAngle = angle + waveOffset;
   
-  drawBoat(angle, CG, CB, loadX);
+  drawBoat(angle, CG, CB, loadY);
 
   // Update UI info
   angleDisplay.textContent = (angle * 180 / Math.PI).toFixed(1);
@@ -187,9 +187,9 @@ function loop(timestamp) {
 
 let lastTime = null;
 
-loadXSlider.addEventListener('input', (e) => {
-  loadX = parseFloat(e.target.value);
-  loadXValSpan.textContent = loadX;
+loadYSlider.addEventListener('input', (e) => {
+  loadY = parseFloat(e.target.value);
+  loadYValSpan.textContent = loadY;
 });
 
 // Attach reset button handler
@@ -205,9 +205,9 @@ function resetSimulation() {
   capsized = false;
 
   // Reset load position and slider UI to initial
-  loadX = 0;
-  loadXSlider.value = 0;
-  loadXValSpan.textContent = "0";
+  loadY = 0;
+  loadYSlider.value = 0;
+  loadYValSpan.textContent = "0";
 }
 
 resetSimulation();
