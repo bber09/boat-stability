@@ -176,6 +176,8 @@ function loop(timestamp) {
 
   // Add waveOffset to physics angle for display only
   const displayAngle = angle + waveOffset;
+
+  console.log('Timestamp:', timestamp.toFixed(2), 'Elapsed (s):', elapsed.toFixed(2), 'Wave Offset (rad):', waveOffset.toFixed(4));
   
   drawBoat(displayAngle, CG, CB, loadY);
 
