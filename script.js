@@ -203,7 +203,8 @@ function resetSimulation() {
   angularVelocity = 0;
   angularAcceleration = 0;
   capsized = false;
-
+  lastTime = null; // reset animation timing
+  
   // Reset load position and slider UI to initial
   loadY = 0;
   loadYSlider.value = 0;
