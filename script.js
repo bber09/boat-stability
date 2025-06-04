@@ -70,64 +70,43 @@ function calcCB(angle) {
 }
 
 function drawBoat(displayAngle, CG, CB, loadY) {
+  // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.save();
-  // Move origin to center bottom for drawing
+  // Compute the “origin” for drawing (center‐bottom of screen)
   const originX = canvas.width / 2;
   const originY = canvas.height * 0.75;
+
+  // Draw the waterline HORIZONTALLY (no rotation)
+  ctx.save();
+  ctx.translate(originX, originY);
+  ctx.strokeStyle = '#0000FF';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(-canvas.width, 0);
+  ctx.lineTo(canvas.width, 0);
+  ctx.stroke();
+  ctx.restore();
+
+  // Draw the boat itself, rotated by displayAngle
+  ctx.save();
   ctx.translate(originX, originY);
   ctx.rotate(displayAngle);
 
-  // Draw hull rectangle
+  // Draw Hull rectangle
   ctx.fillStyle = '#654321';
-  ctx.fillRect(-boatWidth/2, 0, boatWidth, -boatHeight);
+  ctx.fillRect(-boatWidth / 2, 0, boatWidth, -boatHeight);
 
-  // Draw waterline (horizontal line at y=0)
-  ctx.strokeStyle = '#0077ff';
-  ctx.lineWidth = 3;
+  // Draw CB marker for debugging
+  ctx.strokeStyle = '#FF0000';
   ctx.beginPath();
-  ctx.moveTo(-boatWidth, 0);
-  ctx.lineTo(boatWidth, 0);
-  ctx.stroke();
-
-  // Draw load as red circle
-  ctx.fillStyle = 'red';
-  ctx.beginPath();
-  ctx.arc(0, -boatHeight / 2 - loadY, 8, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Draw CG as blue circle
-  ctx.fillStyle = 'blue';
-  ctx.beginPath();
-  ctx.arc(CG.x, -CG.y, 8, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Draw CB as green circle
-  ctx.fillStyle = 'green';
-  ctx.beginPath();
-  ctx.arc(CB.x, -CB.y, 8, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Draw lines to indicate forces
-  // Weight down from CG
-  ctx.strokeStyle = 'blue';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(CG.x, -CG.y);
-  ctx.lineTo(CG.x, 50);
-  ctx.stroke();
-
-  // Buoyancy up from CB
-  ctx.strokeStyle = 'green';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(CB.x, -CB.y);
+  ctx.moveTo(CB.x, -boatHeight);
   ctx.lineTo(CB.x, -boatHeight - 50);
   ctx.stroke();
 
   ctx.restore();
 }
+
 
 function updatePhysics(dt) {
   if (capsized) return;
