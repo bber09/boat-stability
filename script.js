@@ -77,7 +77,7 @@ function drawBoat(displayAngle, CG, CB, loadY) {
   const originX = canvas.width / 2;
   const originY = canvas.height * 0.75;
   ctx.translate(originX, originY);
-  ctx.rotate(angle);
+  ctx.rotate(displayAngle);
 
   // Draw hull rectangle
   ctx.fillStyle = '#654321';
