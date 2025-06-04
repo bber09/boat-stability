@@ -234,11 +234,16 @@ function updatePhysics(dt) {
   const { boatCG, loadCG, combinedCG } = updateCG();
   const CB = calcCB(angle);  // still used in torque calculation
 
-  // If the vertical line through combinedCG.x lies outside ±half‐width, capsize immediately.
-  if (Math.abs(combinedCG.x) > boatWidth / 2) {
+ // CAPSIZING CHECK
+  //    Compute world‐x of combined CG:
+  const xCG_world = combinedCG.x * Math.cos(angle)
+                   - combinedCG.y * Math.sin(angle);
+  //    Compute half‐corner x at waterline:
+  const halfCornerX = (boatWidth / 2) * Math.cos(angle);
+
+  if (Math.abs(xCG_world) > halfCornerX) {
     capsized = true;
-    // snap to fully capsized (±90°)
-    angle = combinedCG.x > 0 ? Math.PI / 2 : -Math.PI / 2;
+    angle = (xCG_world > 0 ? Math.PI/2 : -Math.PI/2);
     angularVelocity = 0;
     return { boatCG, loadCG, combinedCG };
   }
