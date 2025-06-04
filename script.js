@@ -143,10 +143,10 @@ function drawBoat(displayAngle, CG, CB, loadY) {
   ctx.stroke();
 
   // Draw load position if you keep a movable weight
-  // small blue circle at (loadX, loadY):
+  // small blue circle at (0, loadY):
   ctx.fillStyle = '#0000FF';
   ctx.beginPath();
-  ctx.arc(loadX, loadY, 5, 0, Math.PI * 2);
+  ctx.arc(0, loadY, 5, 0, Math.PI * 2);
   ctx.fill();
   
   ctx.restore();
