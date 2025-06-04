@@ -239,7 +239,9 @@ function updatePhysics(dt) {
   const xCG_world = combinedCG.x * Math.cos(angle)
                    - combinedCG.y * Math.sin(angle);
   //    Compute half‐corner x at waterline:
-  const halfCornerX = (boatWidth / 2) * Math.cos(angle);
+  const halfCornerX =
+  (boatWidth  / 2) * Math.cos(angle)
++ (boatHeight / 2) * Math.sin(angle);
 
   if (Math.abs(xCG_world) > halfCornerX) {
     capsized = true;
@@ -299,7 +301,9 @@ function loop(timestamp) {
     'Elapsed (s):', elapsed.toFixed(2), 
     'Wave On?:', waveOn,
     'Wave Offset (rad):', waveOffset.toFixed(4),
-    'Angle:', (angle * 180 / Math.PI).toFixed(1)
+    'Angle:', (angle * 180 / Math.PI).toFixed(1),
+    'xCG_world =', xCG_world.toFixed(2),
+    'halfCornerX =', halfCornerX.toFixed(2)
   );
   
   drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY);
