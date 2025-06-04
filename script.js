@@ -53,12 +53,15 @@ function updateCG() {
   // Load CG at (0, boatHeight/2 - loadY)
   const loadCG = {x: 0, y: (-boatHeight / 2) - loadY};
   
-  // Composite CG weighted average
+  // Combined CG weighted average
   const totalMass = boatMass + loadMass;
-  const CGx = (boatMass * boatCG.x + loadMass * loadCG.x) / totalMass;
-  const CGy = (boatMass * boatCG.y + loadMass * loadCG.y) / totalMass;
+  const combinedCG = {
+    x: (boatMass * boatCG.x + loadMass * loadCG.x) / totalMass,
+    y: (boatMass * boatCG.y + loadMass * loadCG.y) / totalMass,
+  };
 
-  return {x: CGx, y: CGy};
+  // Return all three
+  return { boatCG, loadCG, combinedCG };
 }
 
 function calcCB(angle) {
@@ -80,7 +83,7 @@ function calcCB(angle) {
   return {x: shiftX, y: -boatHeight / 2};
 }
 
-function drawBoat(displayAngle, CG, CB, loadY) {
+function drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY) {
   // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -111,57 +114,60 @@ function drawBoat(displayAngle, CG, CB, loadY) {
   ctx.fillStyle = '#654321';
   ctx.fillRect(-boatWidth / 2, 0, boatWidth, -boatHeight);
 
-  // Draw CG marker (small circle) and weight arrow (downward)
-  // Assume CG.x, CG.y are in “boat coordinates” (y is negative if above base)
-  // red circle for CG
-  ctx.fillStyle = '#FF0000';            
+  // --- Draw BOAT’s own CG (red) ---
+  ctx.fillStyle = '#FF0000';
   ctx.beginPath();
-  ctx.arc(CG.x, CG.y, 5, 0, Math.PI * 2);
+  ctx.arc(boatCG.x, boatCG.y, 5, 0, Math.PI * 2);
   ctx.fill();
 
-  // Draw weight arrow from CG downward
-  const weightArrowLength = 50;         // adjust length if needed
+ // Weight arrow down from boatCG
   ctx.strokeStyle = '#FF0000';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(CG.x, CG.y);
-  ctx.lineTo(CG.x, CG.y + weightArrowLength);
+  ctx.moveTo(boatCG.x, boatCG.y);
+  ctx.lineTo(boatCG.x, boatCG.y + 50);
   ctx.stroke();
-  // arrowhead (small V)
   ctx.beginPath();
-  ctx.moveTo(CG.x - 5, CG.y + weightArrowLength - 10);
-  ctx.lineTo(CG.x,     CG.y + weightArrowLength);
-  ctx.lineTo(CG.x + 5, CG.y + weightArrowLength - 10);
+  ctx.moveTo(boatCG.x - 5, boatCG.y + 40);
+  ctx.lineTo(boatCG.x, boatCG.y + 50);
+  ctx.lineTo(boatCG.x + 5, boatCG.y + 40);
   ctx.stroke();
   
-  // Draw CB marker (small circle) and buoyant arrow (upward)
-  // green circle for CB
-  ctx.fillStyle = '#00AA00';            
+// --- Draw LOAD’s CG (orange) ---
+  ctx.fillStyle = '#FFA500';
   ctx.beginPath();
-  ctx.arc(CB.x, CB.y, 5, 0, Math.PI * 2);
+  ctx.arc(loadCG.x, loadCG.y, 5, 0, Math.PI * 2);
   ctx.fill();
-
- // Draw buoyant force arrow from CB upward
-  const buoyArrowLength = 50;           // adjust length if needed
-  ctx.strokeStyle = '#00AA00';
+  // Weight arrow down from loadCG
+  ctx.strokeStyle = '#FFA500';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(CB.x, CB.y);
-  ctx.lineTo(CB.x, CB.y - buoyArrowLength);
+  ctx.moveTo(loadCG.x, loadCG.y);
+  ctx.lineTo(loadCG.x, loadCG.y + 50);
   ctx.stroke();
-  // arrowhead (small V)
   ctx.beginPath();
-  ctx.moveTo(CB.x - 5, CB.y - buoyArrowLength + 10);
-  ctx.lineTo(CB.x,     CB.y - buoyArrowLength);
-  ctx.lineTo(CB.x + 5, CB.y - buoyArrowLength + 10);
+  ctx.moveTo(loadCG.x - 5, loadCG.y + 40);
+  ctx.lineTo(loadCG.x, loadCG.y + 50);
+  ctx.lineTo(loadCG.x + 5, loadCG.y + 40);
   ctx.stroke();
 
-  // Draw load position if you keep a movable weight
-  // small blue circle at (0, loadY):
-  ctx.fillStyle = '#0000FF';
+  // --- Draw COMBINED CG (black) ---
+  ctx.fillStyle = '#000000';
   ctx.beginPath();
-  ctx.arc(0, loadY, 5, 0, Math.PI * 2);
+  ctx.arc(combinedCG.x, combinedCG.y, 5, 0, Math.PI * 2);
   ctx.fill();
+  // Weight arrow down from combinedCG
+  ctx.strokeStyle = '#000000';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(combinedCG.x, combinedCG.y);
+  ctx.lineTo(combinedCG.x, combinedCG.y + 50);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(combinedCG.x - 5, combinedCG.y + 40);
+  ctx.lineTo(combinedCG.x, combinedCG.y + 50);
+  ctx.lineTo(combinedCG.x + 5, combinedCG.y + 40);
+  ctx.stroke();
   
   ctx.restore();
 }
@@ -170,12 +176,12 @@ function drawBoat(displayAngle, CG, CB, loadY) {
 function updatePhysics(dt) {
   if (capsized) return;
 
-  // Update CG and CB
-  const CG = updateCG();
-  const CB = calcCB(angle);
+  // Update CGs
+  const { boatCG, loadCG, combinedCG } = updateCG();
+  const CB = calcCB(angle);  // still used in torque calculation
 
-  // Calculate lever arm (horizontal distance between CG and CB)
-  const leverArm = CB.x - CG.x;
+  // Calculate lever arm between CB and **combinedCG**
+  const leverArm = CB.x - combinedCG.x;
 
   // Calculate torque: torque = leverArm * weight * g
   const totalMass = boatMass + loadMass;
@@ -198,7 +204,7 @@ function updatePhysics(dt) {
     angularVelocity = 0;
   }
 
-  return {CG, CB};
+   return { boatCG, loadCG, combinedCG };
 }
 
 function loop(timestamp) {
@@ -206,7 +212,7 @@ function loop(timestamp) {
   const dt = (timestamp - lastTime) / 1000; // seconds
   lastTime = timestamp;
 
-  const {CG, CB} = updatePhysics(dt);
+ const { boatCG, loadCG, combinedCG } = updatePhysics(dt);
 
   // Calculate wave offset using total elapsed time in seconds
   const elapsed = timestamp / 1000;
@@ -223,7 +229,7 @@ function loop(timestamp) {
     'Angle:', (angle * 180 / Math.PI).toFixed(1)
   );
   
-  drawBoat(displayAngle, CG, CB, loadY);
+  drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY);
 
   // Update UI info
   angleDisplay.textContent = (angle * 180 / Math.PI).toFixed(1);
