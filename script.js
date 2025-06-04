@@ -97,13 +97,58 @@ function drawBoat(displayAngle, CG, CB, loadY) {
   ctx.fillStyle = '#654321';
   ctx.fillRect(-boatWidth / 2, 0, boatWidth, -boatHeight);
 
-  // Draw CB marker for debugging
-  ctx.strokeStyle = '#FF0000';
+  // Draw CG marker (small circle) and weight arrow (downward)
+  // Assume CG.x, CG.y are in “boat coordinates” (y is negative if above base)
+  // red circle for CG
+  ctx.fillStyle = '#FF0000';            
   ctx.beginPath();
-  ctx.moveTo(CB.x, -boatHeight);
-  ctx.lineTo(CB.x, -boatHeight - 50);
+  ctx.arc(CG.x, CG.y, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Draw weight arrow from CG downward
+  const weightArrowLength = 50;         // adjust length if needed
+  ctx.strokeStyle = '#FF0000';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(CG.x, CG.y);
+  ctx.lineTo(CG.x, CG.y + weightArrowLength);
+  ctx.stroke();
+  // arrowhead (small V)
+  ctx.beginPath();
+  ctx.moveTo(CG.x - 5, CG.y + weightArrowLength - 10);
+  ctx.lineTo(CG.x,     CG.y + weightArrowLength);
+  ctx.lineTo(CG.x + 5, CG.y + weightArrowLength - 10);
+  ctx.stroke();
+  
+  // Draw CB marker (small circle) and buoyant arrow (upward)
+  // green circle for CB
+  ctx.fillStyle = '#00AA00';            
+  ctx.beginPath();
+  ctx.arc(CB.x, CB.y, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+ // Draw buoyant force arrow from CB upward
+  const buoyArrowLength = 50;           // adjust length if needed
+  ctx.strokeStyle = '#00AA00';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(CB.x, CB.y);
+  ctx.lineTo(CB.x, CB.y - buoyArrowLength);
+  ctx.stroke();
+  // arrowhead (small V)
+  ctx.beginPath();
+  ctx.moveTo(CB.x - 5, CB.y - buoyArrowLength + 10);
+  ctx.lineTo(CB.x,     CB.y - buoyArrowLength);
+  ctx.lineTo(CB.x + 5, CB.y - buoyArrowLength + 10);
   ctx.stroke();
 
+  // Draw load position if you keep a movable weight
+  // small blue circle at (loadX, loadY):
+  ctx.fillStyle = '#0000FF';
+  ctx.beginPath();
+  ctx.arc(loadX, loadY, 5, 0, Math.PI * 2);
+  ctx.fill();
+  
   ctx.restore();
 }
 
