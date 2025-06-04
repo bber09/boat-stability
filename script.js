@@ -287,20 +287,21 @@ function loop(timestamp) {
 
  const { boatCG, loadCG, combinedCG } = updatePhysics(dt);
 
-  // Recompute xCG_world and halfCornerX here (same formula as in updatePhysics)
-  const xCG_world = combinedCG.x * Math.cos(angle)
-                   - combinedCG.y * Math.sin(angle);
-  const halfCornerX =
-    (boatWidth  / 2) * Math.cos(angle)
-  + (boatHeight / 2) * Math.sin(angle);
-  
   // Calculate wave offset using total elapsed time in seconds
   const elapsed = timestamp / 1000;
-  const rawOffset = waveMaxAngle * Math.sin(2 * Math.PI * waveFrequency * elapsed);
+  const rawOffset = waveMaxAngle * Math.sin(2 * Math.PI * waveFrequency * (timestamp/1000));
   const waveOffset = waveOn ? rawOffset : 0;
 
   // Add waveOffset to physics angle for display only
-  const displayAngle = angle + waveOffset;
+  const displayAngle = waveOn ? angle + rawOffset : angle;
+  
+  // Recompute xCG_world and halfCornerX here (same formula as in updatePhysics)
+  const xCG_world = combinedCG.x * Math.cos(displayAngle)
+                   - combinedCG.y * Math.sin(displayAngle);
+  const halfCornerX = 
+       (boatWidth  / 2) * Math.cos(displayAngle)
+     + (boatHeight / 2) * Math.sin(displayAngle);
+  
 
   // For debugging in console:
   console.log(
@@ -309,6 +310,7 @@ function loop(timestamp) {
     'Wave On?:', waveOn,
     'Wave Offset (rad):', waveOffset.toFixed(4),
     'Angle:', (angle * 180 / Math.PI).toFixed(1),
+    'displayAngle (deg):', (displayAngle*180/Math.PI).toFixed(1),
     'xCG_world =', xCG_world.toFixed(2),
     'halfCornerX =', halfCornerX.toFixed(2)
   );
