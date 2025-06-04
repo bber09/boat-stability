@@ -233,21 +233,21 @@ function updatePhysics(dt) {
   // Update CGs
   const { boatCG, loadCG, combinedCG } = updateCG();
   const CB = calcCB(angle);  // still used in torque calculation
+  const displayAngle = waveOn ? angle + rawOffset : angle;
+  
+  // CAPSIZING CHECK
+  // Compute world‐x of combined CG:
+  const xCG_world_withWave = combinedCG.x * Math.cos(displayAngle)
+                         - combinedCG.y * Math.sin(displayAngle);
+  // Compute half‐corner x at waterline:
+  const halfCornerX_withWave = (boatWidth/2) * Math.cos(displayAngle)
+                           + (boatHeight/2) * Math.sin(displayAngle);
 
- // CAPSIZING CHECK
-  //    Compute world‐x of combined CG:
-  const xCG_world = combinedCG.x * Math.cos(angle)
-                   - combinedCG.y * Math.sin(angle);
-  //    Compute half‐corner x at waterline:
-  const halfCornerX =
-  (boatWidth  / 2) * Math.cos(angle)
-+ (boatHeight / 2) * Math.sin(angle);
-
-  if (Math.abs(xCG_world) > halfCornerX) {
-    capsized = true;
-    angle = (xCG_world > 0 ? Math.PI/2 : -Math.PI/2);
-    angularVelocity = 0;
-    return { boatCG, loadCG, combinedCG };
+  if (Math.abs(xCG_world_withWave) > halfCornerX_withWave) {
+  capsized = true;
+  angle = (xCG_world_withWave > 0 ? Math.PI/2 : -Math.PI/2);
+  angularVelocity = 0;
+  return { boatCG, loadCG, combinedCG };
   }
   
   // Calculate lever arm between CB and **combinedCG**
