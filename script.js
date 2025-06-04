@@ -40,7 +40,7 @@ function updateCG() {
   const boatCG = {x: 0, y: -boatHeight / 2};
 
   // Load CG at (0, boatHeight/2 - loadY)
-  const loadCG = {x: 0, y: (-boatHeight / 2) + loadY};
+  const loadCG = {x: 0, y: (-boatHeight / 2) - loadY};
   
   // Composite CG weighted average
   const totalMass = boatMass + loadMass;
