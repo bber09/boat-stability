@@ -69,7 +69,7 @@ function calcCB(angle) {
   return {x: shiftX, y: boatHeight / 2};
 }
 
-function drawBoat(displayangle, CG, CB, loadY) {
+function drawBoat(displayAngle, CG, CB, loadY) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.save();
@@ -177,7 +177,7 @@ function loop(timestamp) {
   // Add waveOffset to physics angle for display only
   const displayAngle = angle + waveOffset;
   
-  drawBoat(displayangle, CG, CB, loadY);
+  drawBoat(displayAngle, CG, CB, loadY);
 
   // Update UI info
   angleDisplay.textContent = (angle * 180 / Math.PI).toFixed(1);
