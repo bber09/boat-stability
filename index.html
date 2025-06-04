@@ -10,11 +10,18 @@
 <h1>Boat Stability Simulation</h1>
 
 <div id="controls">
+  <p>
   <label for="loadY">Load position (y): </label>
     <input type="range" id="loadY" min="-20" max="20" value="0" />
   <span id="loadYVal">0</span> cm
+  </p>
+  <p>
   <button id="resetBtn">Reset</button>
+  </p>
+  <p>
   <button id="toggleWaveBtn">Turn Wave On/Off</button>
+  </p>
+  <p>
   <label for="boatMassInput">Boat Mass (kg):</label>
     <input 
     id="boatMassInput" 
@@ -31,6 +38,7 @@
     min="0" 
     step="0.1"
     />
+  </p>
 </div>
 
 <style>
