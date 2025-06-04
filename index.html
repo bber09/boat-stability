@@ -5,6 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Boat Stability Simulation</title>
 <link rel="stylesheet" href="style.css" />
+<style>
+    /* Stack every “p” (or .control-item) vertically */
+    #controls {
+      display: flex;
+      flex-direction: column; /* force children to stack */
+      align-items: flex-start; /* left-align each line */
+      gap: 0.75rem;           /* space between lines */
+      margin-bottom: 1rem;
+    }
+
+    /* If you keep using <p> for each line, they become flex items */
+    /* Optional: tighten up label/input spacing within each line */
+    #controls label {
+      margin-right: 0.5rem;
+      white-space: nowrap;
+    }
+
+    /* Make buttons and inputs visually consistent */
+    #controls button,
+    #controls input[type="number"],
+    #controls input[type="range"] {
+      padding: 0.25rem 0.5rem;
+      font-size: 1rem;
+    }
+
+    /* Keep slider and its text close together */
+    #loadY {
+      margin-left: 0.5rem;
+      margin-right: 0.25rem;
+    }
+
+    #loadYVal {
+      min-width: 2rem;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 <h1>Boat Stability Simulation</h1>
@@ -15,12 +51,15 @@
     <input type="range" id="loadY" min="-20" max="20" value="0" />
   <span id="loadYVal">0</span> cm
   </p>
+  
   <p>
   <button id="resetBtn">Reset</button>
   </p>
+  
   <p>
   <button id="toggleWaveBtn">Turn Wave On/Off</button>
   </p>
+  
   <p>
   <label for="boatMassInput">Boat Mass (kg):</label>
     <input 
@@ -30,6 +69,9 @@
     min="0" 
     step="0.1"
     />
+  </p>
+
+  <p>
   <label for="loadMassInput">Load Mass (kg):</label>
     <input 
     id="loadMassInput" 
@@ -39,44 +81,8 @@
     step="0.1"
     />
   </p>
+  
 </div>
-
-<style>
-  /* Make all controls sit in a single row, centered vertically,
-     with a gap between each “chunk.” */
-  #controls {
-    display: flex;
-    flex-wrap: wrap;        /* allows wrapping if the screen is narrow */
-    align-items: center;    /* vertically center‐align everything */
-    gap: 1rem;              /* 1rem (≈16px) of space between each item */
-    margin-bottom: 1rem;    /* some breathing room below */
-  }
-
-  /* Optional: give each label/input pair a bit of breathing room */
-  #controls label {
-    margin-right: 0.25rem;  /* small gap after each label */
-    white-space: nowrap;    /* keep “Boat Mass (kg):” on one line */
-  }
-
-  /* Make range‐slider and text a bit tighter together */
-  #loadY {
-    margin-left: 0.5rem;
-    margin-right: 0.25rem;
-  }
-
-  #loadYVal {
-    min-width: 2rem;        /* avoid it collapsing when “0 cm” changes */
-    text-align: center;
-  }
-
-  /* Make buttons and inputs visually consistent height */
-  #controls button,
-  #controls input[type="number"],
-  #controls input[type="range"] {
-    padding: 0.25rem 0.5rem;
-    font-size: 1rem;
-  }
-</style>
   
 <canvas id="canvas" width="600" height="400"></canvas>
 
