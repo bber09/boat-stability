@@ -158,7 +158,7 @@ function drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY) {
   ctx.fill();
 
   ctx.restore();
-
+}
 function rotatePoint(pt, θ) {
     return {
       x: pt.x * Math.cos(θ) - pt.y * Math.sin(θ),
@@ -233,6 +233,8 @@ function updatePhysics(dt) {
   // Update CGs
   const { boatCG, loadCG, combinedCG } = updateCG();
   const CB = calcCB(angle);  // still used in torque calculation
+  const rawOffset = waveMaxAngle * Math.sin(2 * Math.PI * waveFrequency * (timestamp/1000));
+  const waveOffset = waveOn ? rawOffset : 0;
   const displayAngle = waveOn ? angle + rawOffset : angle;
   
   // CAPSIZING CHECK
