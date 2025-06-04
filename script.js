@@ -196,6 +196,15 @@ function updatePhysics(dt) {
   const { boatCG, loadCG, combinedCG } = updateCG();
   const CB = calcCB(angle);  // still used in torque calculation
 
+  // If the vertical line through combinedCG.x lies outside ±half‐width, capsize immediately.
+  if (Math.abs(combinedCG.x) > boatWidth / 2) {
+    capsized = true;
+    // snap to fully capsized (±90°)
+    angle = combinedCG.x > 0 ? Math.PI / 2 : -Math.PI / 2;
+    angularVelocity = 0;
+    return { boatCG, loadCG, combinedCG };
+  }
+  
   // Calculate lever arm between CB and **combinedCG**
   const leverArm = CB.x - combinedCG.x;
 
