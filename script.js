@@ -35,6 +35,17 @@ let loadY = 0;
 // Moment of inertia approx (rectangle about center)
 const I = (1/12) * (boatMass + loadMass) * (boatWidth ** 2 + (boatHeight*3)**2);
 
+// Compute the static “draft” (submerged depth) so that displaced mass of water = boatMass + loadMass.
+// Since we treat waterDensity as kg/cm², the submerged area = boatWidth * submergedDepth.
+function computeSubmergedDepth() {
+  const totalMass       = boatMass + loadMass; // kg
+  const submergedDepth  = totalMass / (boatWidth * waterDensity);
+  // (boatWidth * submergedDepth * waterDensity) = totalMass
+  return Math.min(submergedDepth, boatHeight); 
+  // clamp so it never goes beyond full hull height
+}
+
+
 function updateCG() {
   // Boat CG at center (0, boatHeight/2)
   const boatCG = {x: 0, y: -boatHeight / 2};
@@ -88,9 +99,12 @@ function drawBoat(displayAngle, CG, CB, loadY) {
   ctx.stroke();
   ctx.restore();
 
+  // Compute how deep the hull should be
+  const submergedDepth = computeSubmergedDepth(); // in cm
+  
   // Draw the boat itself, rotated by displayAngle
   ctx.save();
-  ctx.translate(originX, originY);
+  ctx.translate(originX, originY + submergedDepth);
   ctx.rotate(displayAngle);
 
   // Draw Hull rectangle
@@ -186,7 +200,7 @@ function updatePhysics(dt) {
 
   return {CG, CB};
 }
-
+let lastTime = null;
 function loop(timestamp) {
   if (!lastTime) lastTime = timestamp;
   const dt = (timestamp - lastTime) / 1000; // seconds
@@ -201,7 +215,13 @@ function loop(timestamp) {
   // Add waveOffset to physics angle for display only
   const displayAngle = angle + waveOffset;
 
-  console.log('Timestamp:', timestamp.toFixed(2), 'Elapsed (s):', elapsed.toFixed(2), 'Wave Offset (rad):', waveOffset.toFixed(4));
+  // For debugging in console:
+  console.log(
+    'Timestamp:', timestamp.toFixed(2), 
+    'Elapsed (s):', elapsed.toFixed(2), 
+    'Wave Offset (rad):', waveOffset.toFixed(4)
+    'Angle:', (angle * 180 / Math.PI).toFixed(1)
+  );
   
   drawBoat(displayAngle, CG, CB, loadY);
 
