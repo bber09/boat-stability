@@ -219,7 +219,7 @@ function loop(timestamp) {
   console.log(
     'Timestamp:', timestamp.toFixed(2), 
     'Elapsed (s):', elapsed.toFixed(2), 
-    'Wave Offset (rad):', waveOffset.toFixed(4)
+    'Wave Offset (rad):', waveOffset.toFixed(4),
     'Angle:', (angle * 180 / Math.PI).toFixed(1)
   );
   
