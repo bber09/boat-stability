@@ -287,6 +287,13 @@ function loop(timestamp) {
 
  const { boatCG, loadCG, combinedCG } = updatePhysics(dt);
 
+  // Recompute xCG_world and halfCornerX here (same formula as in updatePhysics)
+  const xCG_world = combinedCG.x * Math.cos(angle)
+                   - combinedCG.y * Math.sin(angle);
+  const halfCornerX =
+    (boatWidth  / 2) * Math.cos(angle)
+  + (boatHeight / 2) * Math.sin(angle);
+  
   // Calculate wave offset using total elapsed time in seconds
   const elapsed = timestamp / 1000;
   const rawOffset = waveMaxAngle * Math.sin(2 * Math.PI * waveFrequency * elapsed);
