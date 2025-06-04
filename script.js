@@ -22,6 +22,7 @@ const waveMaxAngle = 10 * Math.PI / 180; // 10 degrees in radians
 const waveFrequency = 0.5; // oscillations per second (adjust speed)
 
 // Simulation state
+let startTime = Date.now();
 let angle = 0;       // radians, positive = tilt right
 let angularVelocity = 0;
 let angularAcceleration = 0;
@@ -176,7 +177,7 @@ function loop(timestamp) {
   // Add waveOffset to physics angle for display only
   const displayAngle = angle + waveOffset;
   
-  drawBoat(angle, CG, CB, loadY);
+  drawBoat(displayangle, CG, CB, loadY);
 
   // Update UI info
   angleDisplay.textContent = (angle * 180 / Math.PI).toFixed(1);
@@ -213,3 +214,4 @@ function resetSimulation() {
 
 resetSimulation();
 requestAnimationFrame(loop);
+
