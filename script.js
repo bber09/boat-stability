@@ -225,7 +225,6 @@ function rotatePoint(pt, θ) {
   ctx.lineTo(combinedCG_world.x, combinedCG_world.y + arrowLength);
   ctx.lineTo(combinedCG_world.x + 5, combinedCG_world.y + arrowLength - 10);
   ctx.stroke();
-}
 
 function updatePhysics(dt) {
   if (capsized) return;
