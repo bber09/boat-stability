@@ -108,7 +108,7 @@ function calcCB(angle) {
   return {x: shiftX, y: -boatHeight / 2};
 }
 
-function drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY) {
+function drawBoat(displayAngle, boatCG, loadCG, combinedCG) {
   // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -159,13 +159,13 @@ function drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY) {
 
   ctx.restore();
 }
+
 function rotatePoint(pt, θ) {
     return {
       x: pt.x * Math.cos(θ) - pt.y * Math.sin(θ),
       y: pt.x * Math.sin(θ) + pt.y * Math.cos(θ)
     };
-  }
-
+ 
   // Boat-CG world position:
   const boatCG_world = rotatePoint(boatCG, displayAngle);
   boatCG_world.x += originX;
@@ -225,8 +225,9 @@ function rotatePoint(pt, θ) {
   ctx.lineTo(combinedCG_world.x, combinedCG_world.y + arrowLength);
   ctx.lineTo(combinedCG_world.x + 5, combinedCG_world.y + arrowLength - 10);
   ctx.stroke();
+}
 
-function updatePhysics(dt) {
+function updatePhysics(dt, timestamp) {
   if (capsized) return;
 
   // Update CGs
@@ -286,7 +287,7 @@ function loop(timestamp) {
   const dt = (timestamp - lastTime) / 1000; // seconds
   lastTime = timestamp;
 
- const { boatCG, loadCG, combinedCG } = updatePhysics(dt);
+ const { boatCG, loadCG, combinedCG } = updatePhysics(dt, timestamp);
 
   // Calculate wave offset using total elapsed time in seconds
   const elapsed = timestamp / 1000;
