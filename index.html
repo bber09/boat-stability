@@ -10,15 +10,15 @@
     #controls {
       display: flex;
       flex-direction: column; /* force children to stack */
-      align-items: flex-start; /* left-align each line */
-      gap: 0.75rem;           /* space between lines */
+      align-items: center;
+      gap: 0.25rem;           /* space between lines */
       margin-bottom: 1rem;
     }
 
     /* If you keep using <p> for each line, they become flex items */
     /* Optional: tighten up label/input spacing within each line */
     #controls label {
-      margin-right: 0.5rem;
+      margin-right: 0.25rem;
       white-space: nowrap;
     }
 
@@ -26,13 +26,13 @@
     #controls button,
     #controls input[type="number"],
     #controls input[type="range"] {
-      padding: 0.25rem 0.5rem;
+      padding: 0.25rem 0.25rem;
       font-size: 1rem;
     }
 
     /* Keep slider and its text close together */
     #loadY {
-      margin-left: 0.5rem;
+      margin-left: 0.25rem;
       margin-right: 0.25rem;
     }
 
