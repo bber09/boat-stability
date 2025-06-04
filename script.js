@@ -38,9 +38,9 @@ function updateCG() {
   // Boat CG at center (0, boatHeight/2)
   const boatCG = {x: 0, y: boatHeight / 2};
 
-  // Load CG at (loadY, boatHeight/2)
-  const loadCG = {x: loadY, y: boatHeight / 2};
-
+  // Load CG at (0, boatHeight/2 - loadY)
+  const loadCG = {x: 0, y: (boatHeight / 2) - loadY};
+  
   // Composite CG weighted average
   const totalMass = boatMass + loadMass;
   const CGx = (boatMass * boatCG.x + loadMass * loadCG.x) / totalMass;
@@ -93,7 +93,7 @@ function drawBoat(angle, CG, CB, loadY) {
   // Draw load as red circle
   ctx.fillStyle = 'red';
   ctx.beginPath();
-  ctx.arc(loadY, -boatHeight/2, 8, 0, Math.PI * 2);
+  ctx.arc(0, -boatHeight / 2 - loadY, 8, 0, Math.PI * 2);
   ctx.fill();
 
   // Draw CG as blue circle
