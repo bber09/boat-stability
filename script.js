@@ -158,7 +158,6 @@ function drawBoat(displayAngle, boatCG, loadCG, combinedCG, loadY) {
   ctx.fill();
 
   ctx.restore();
-}
 
 function rotatePoint(pt, θ) {
     return {
