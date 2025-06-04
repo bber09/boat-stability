@@ -200,7 +200,7 @@ function updatePhysics(dt) {
 
   return {CG, CB};
 }
-let lastTime = null;
+
 function loop(timestamp) {
   if (!lastTime) lastTime = timestamp;
   const dt = (timestamp - lastTime) / 1000; // seconds
