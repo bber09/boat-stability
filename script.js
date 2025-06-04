@@ -6,6 +6,8 @@ const loadYValSpan = document.getElementById('loadYVal');
 const resetBtn = document.getElementById('resetBtn');
 const angleDisplay = document.getElementById('angleDisplay');
 const capsizedDisplay = document.getElementById('capsizedDisplay');
+const toggleWaveBtn = document.getElementById('toggleWaveBtn');
+let waveOn = true; 
 
 // Boat parameters (all in cm and kg)
 const boatWidth = 160;   // hull width
@@ -216,7 +218,8 @@ function loop(timestamp) {
 
   // Calculate wave offset using total elapsed time in seconds
   const elapsed = timestamp / 1000;
-  const waveOffset = waveMaxAngle * Math.sin(2 * Math.PI * waveFrequency * elapsed);
+  const rawOffset = waveMaxAngle * Math.sin(2 * Math.PI * waveFrequency * elapsed);
+  const waveOffset = waveOn ? rawOffset : 0;
 
   // Add waveOffset to physics angle for display only
   const displayAngle = angle + waveOffset;
@@ -225,6 +228,7 @@ function loop(timestamp) {
   console.log(
     'Timestamp:', timestamp.toFixed(2), 
     'Elapsed (s):', elapsed.toFixed(2), 
+    'Wave On?:', waveOn,
     'Wave Offset (rad):', waveOffset.toFixed(4),
     'Angle:', (angle * 180 / Math.PI).toFixed(1)
   );
@@ -248,6 +252,17 @@ loadYSlider.addEventListener('input', (e) => {
 // Attach reset button handler
 resetBtn.addEventListener('click', () => {
   resetSimulation();
+});
+
+// Attach wave on/off button
+toggleWaveBtn.addEventListener('click', () => {
+  waveOn = !waveOn; // flip the flag
+
+  if (waveOn) {
+    toggleWaveBtn.textContent = 'Turn Wave Off';
+  } else {
+    toggleWaveBtn.textContent = 'Turn Wave On';
+  }
 });
 
 function resetSimulation() {
