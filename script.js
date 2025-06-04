@@ -68,7 +68,7 @@ function calcCB(angle) {
   return {x: shiftX, y: boatHeight / 2};
 }
 
-function drawBoat(angle, CG, CB, loadY) {
+function drawBoat(displayangle, CG, CB, loadY) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.save();
