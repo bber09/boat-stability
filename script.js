@@ -10,10 +10,12 @@ const toggleWaveBtn = document.getElementById('toggleWaveBtn');
 let waveOn = true; 
 
 // Boat parameters (all in cm and kg)
-const boatWidth = 160;   // hull width
-const boatHeight = 40;   // hull height
+const boatWidthInputElem = document.getElementById('boatWidthInput');
+const boatHeightInputElem = document.getElementById('boatHeightInput');
 const boatMassInputElem = document.getElementById('boatMassInput');     // mass of boat hull
 const loadMassInputElem = document.getElementById('loadMassInput');     // mass of movable load
+let boatWidth  = parseFloat(boatWidthInputElem.value);
+let boatHeight = parseFloat(boatHeightInputElem.value);
 let boatMass = parseFloat( boatMassInputElem.value );
 let loadMass = parseFloat( loadMassInputElem.value );
 
@@ -24,6 +26,13 @@ boatMassInputElem.addEventListener('input', () => {
 loadMassInputElem.addEventListener('input', () => {
   loadMass = parseFloat(loadMassInputElem.value) || 0;
 });
+boatWidthInputElem.addEventListener('input', () => {
+  boatWidth = parseFloat(boatWidthInputElem.value) || 0;
+});
+boatHeightInputElem.addEventListener('input', () => {
+  boatHeight = parseFloat(boatHeightInputElem.value) || 0;
+});
+
 
 // Physics constants
 const g = 980; // gravity cm/s² (9.8 m/s² = 980 cm/s²)
